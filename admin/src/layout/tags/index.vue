@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="h-8">
         标签
     </div>
 </template>

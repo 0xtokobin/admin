@@ -1,8 +1,8 @@
 <template>
-    <Header />
-    <div class=" h-full">
-        <div class="flex h-full">
-            <Sidebar />
+    <div class="h-screen w-screen flex">
+        <Sidebar></Sidebar>
+        <div class=" flex-1">
+            <Header></Header>
             <Main></Main>
         </div>
     </div>
@@ -15,3 +15,4 @@ import Main from './main/index.vue'
 </script>
 
 <style lang="scss" scoped></style>
+

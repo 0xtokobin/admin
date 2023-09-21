@@ -1,6 +1,6 @@
 <template>
-    <div class=" h-20 bg-indigo-600 text-white">
-        头部
+    <div class=" h-16 w-full">
+        6666666666666666
     </div>
 </template>
 

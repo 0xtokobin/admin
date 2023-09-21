@@ -1,8 +1,6 @@
 <template>
-    <div class="flex-1 bg-gray-100">
-        <Tags></Tags>
-        <main>主要内容</main>
-    </div>
+    <Tags></Tags>
+    <main class="h-full bg-gray-200">主要内容</main>
 </template>
 
 <script setup>

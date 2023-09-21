@@ -1,5 +1,4 @@
 import axios from "axios";
-
 const http = axios.create({
   baseURL: "http://localhost:4000/api", // 基础URL
   timeout: 10000, // 请求超时
@@ -9,8 +8,11 @@ const http = axios.create({
 // 请求拦截
 http.interceptors.request.use(
   (config) => {
-    // 如果有token，可以在这里设置请求头
-    // config.headers['Authorization'] = 'Bearer ' + token;
+    const token = localStorage.getItem("token");
+    if (token) {
+      // 让每个请求携带自定义 token
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
     return config;
   },
   (error) => {
@@ -20,7 +22,7 @@ http.interceptors.request.use(
   }
 );
 
-// 响应拦截
+// 响应拦截在响应之前做一些统一的处理
 http.interceptors.response.use(
   (response) => {
     const res = response.data;

@@ -23,6 +23,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import router from '../router/index'
 //导入axios请求方法
 import http from '../utils/axios';
 const authForm = ref({
@@ -32,34 +33,39 @@ const authForm = ref({
 });
 const isRegister = ref(false);
 const handleAuth = async () => {
-    if (isRegister.value) {
-        // Handle registration
-        if (authForm.value.password !== authForm.value.confirmPassword) {
-            ElMessage.error('密码不匹配')
-            return;
-        }
-        try {
-            //发送post请求并且将用户名和密码传递过去
+    try {
+        if (isRegister.value) {
             const response = await http.post('/register', {
                 username: authForm.value.username,
                 password: authForm.value.password
             });
-            //注册成功提示
-            ElMessage.success('注册成功')
+            ElMessage.success('注册成功');
+            //转换为登录模式
+            toggleMode();
             console.log("User registered:", response);
-        } catch (error) {
-            console.error("注册失败:", error);
-        }
-    } else {
-        // 处理登录
-        try {
+        } else {
+            //登录
             const response = await http.post('/login', {
                 username: authForm.value.username,
                 password: authForm.value.password
             });
-            console.log("Logged in:", response.data);
-        } catch (error) {
-            console.error("Login failed:", error);
+            ElMessage.success('登录成功');
+            //等待1秒后跳转到首页
+            setTimeout(() => {
+                router.push('/layout');
+            }, 1000);
+            //将jwt存储到localStorage中
+            localStorage.setItem('authToken', response.data);
+            console.log("Logged in:", response);
+        }
+    } catch (error) {
+        //如果是400错误，说明是用户输入错误，直接提示错误信息
+        if (error.response && error.response.status === 400) {
+            const errorMessage = error.response.data.error;
+            ElMessage.error(errorMessage);
+        } else {
+            console.error("操作失败:", error);
+            ElMessage.error('操作失败');
         }
     }
 };

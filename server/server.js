@@ -25,6 +25,7 @@ db.on("connected", () => {
 db.on("error", (err) => {
   console.error(`MongoDB connection error: ${err}`);
 });
+
 // 登录路由
 app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
@@ -35,10 +36,10 @@ app.post("/api/login", async (req, res) => {
     return res.status(400).send("无效的用户名");
   }
 
-  // 校验密码
+  // 进行密码校验
   const validPassword = await bcrypt.compare(password, user.password);
   if (!validPassword) {
-    return res.status(400).send("无效的密码");
+    return res.status(400).json({ error: "无效的密码" });
   }
 
   // 创建并返回 JWT Token
@@ -51,7 +52,7 @@ app.post("/api/register", async (req, res) => {
   //检查用户名是否已经存在
   let user = await User.findOne({ username: req.body.username });
   //如果存在，返回400错误
-  if (user) return res.status(400).send("用户名已经存在.");
+  if (user) return res.status(400).json({ error: "用户名已存在" });
   //将用户信息保存到数据库
   user = new User({
     username: req.body.username,
